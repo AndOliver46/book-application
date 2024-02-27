@@ -1,0 +1,2 @@
+docker run -d --name mysql-cambio-service -e MYSQL_ROOT_PASSWORD=test -e MYSQL_USER=test -e MYSQL_PASSWORD=test -e MYSQL_DATABASE=cambio_service -p 3306:3306 mysql:latest
+docker run -d --name mysql-book-service -e MYSQL_ROOT_PASSWORD=test -e MYSQL_USER=test -e MYSQL_PASSWORD=test -e MYSQL_DATABASE=book_service -p 3307:3306 mysql:latest
