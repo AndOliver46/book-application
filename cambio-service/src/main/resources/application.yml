@@ -1,0 +1,7 @@
+server:
+  port: 8000
+spring:
+  application:
+    name: cambio-service
+  config:
+    import: optional:configserver:http://localhost:8888
