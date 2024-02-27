@@ -4,14 +4,31 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+
+@Entity
+@Table(name = "cambio")
 public class CambioModel implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@Column(nullable = false, length = 3)
 	private String currencyFrom;
+	@Column(nullable = false, length = 3)
 	private String currencyTo;
+	@Column(nullable = false)
 	private BigDecimal conversionFactor;
+	@Transient
 	private BigDecimal conversionValue;
+	@Transient
 	private String environment;
 	
 	public CambioModel() {}
