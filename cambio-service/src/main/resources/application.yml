@@ -12,7 +12,7 @@ spring:
     password: test
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
   flyway:
     url: jdbc:mysql://localhost:3306

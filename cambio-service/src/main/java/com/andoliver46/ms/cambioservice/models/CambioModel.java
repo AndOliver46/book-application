@@ -2,6 +2,7 @@ package com.andoliver46.ms.cambioservice.models;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
@@ -9,25 +10,23 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
-@Entity
-@Table(name = "cambio")
+@Entity(name = "cambio")
 public class CambioModel implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(nullable = false, length = 3)
-	private String currencyFrom;
-	@Column(nullable = false, length = 3)
-	private String currencyTo;
+	@Column(name = "from_currency", nullable = false, length = 3)
+	private String from;
+	@Column(name = "to_currency", nullable = false, length = 3)
+	private String to;
 	@Column(nullable = false)
 	private BigDecimal conversionFactor;
 	@Transient
-	private BigDecimal conversionValue;
+	private BigDecimal convertedValue;
 	@Transient
 	private String environment;
 	
@@ -37,10 +36,10 @@ public class CambioModel implements Serializable{
 			BigDecimal conversionValue, String environment) {
 		super();
 		this.id = id;
-		this.currencyFrom = currencyFrom;
-		this.currencyTo = currencyTo;
+		this.from = currencyFrom;
+		this.to = currencyTo;
 		this.conversionFactor = conversionFactor;
-		this.conversionValue = conversionValue;
+		this.convertedValue = conversionValue;
 		this.environment = environment;
 	}
 
@@ -53,19 +52,19 @@ public class CambioModel implements Serializable{
 	}
 
 	public String getCurrencyFrom() {
-		return currencyFrom;
+		return from;
 	}
 
 	public void setCurrencyFrom(String currencyFrom) {
-		this.currencyFrom = currencyFrom;
+		this.from = currencyFrom;
 	}
 
 	public String getCurrencyTo() {
-		return currencyTo;
+		return to;
 	}
 
 	public void setCurrencyTo(String currencyTo) {
-		this.currencyTo = currencyTo;
+		this.to = currencyTo;
 	}
 
 	public BigDecimal getConversionFactor() {
@@ -77,11 +76,11 @@ public class CambioModel implements Serializable{
 	}
 
 	public BigDecimal getConversionValue() {
-		return conversionValue;
+		return convertedValue;
 	}
 
 	public void setConversionValue(BigDecimal conversionValue) {
-		this.conversionValue = conversionValue;
+		this.convertedValue = conversionValue;
 	}
 
 	public String getEnvironment() {
@@ -91,10 +90,15 @@ public class CambioModel implements Serializable{
 	public void setEnvironment(String environment) {
 		this.environment = environment;
 	}
+	
+	public void calculate(BigDecimal amount) {
+		this.convertedValue = this.conversionFactor.multiply(amount);
+		this.convertedValue.setScale(2, RoundingMode.CEILING);
+	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(conversionFactor, conversionValue, currencyFrom, currencyTo, environment, id);
+		return Objects.hash(conversionFactor, convertedValue, from, to, environment, id);
 	}
 
 	@Override
@@ -107,8 +111,8 @@ public class CambioModel implements Serializable{
 			return false;
 		CambioModel other = (CambioModel) obj;
 		return Objects.equals(conversionFactor, other.conversionFactor)
-				&& Objects.equals(conversionValue, other.conversionValue)
-				&& Objects.equals(currencyFrom, other.currencyFrom) && Objects.equals(currencyTo, other.currencyTo)
+				&& Objects.equals(convertedValue, other.convertedValue)
+				&& Objects.equals(from, other.from) && Objects.equals(to, other.to)
 				&& Objects.equals(environment, other.environment) && Objects.equals(id, other.id);
 	}
 	
