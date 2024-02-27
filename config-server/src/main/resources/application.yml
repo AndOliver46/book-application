@@ -1,0 +1,15 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/AndOliver46/git-localconfig-repo
+          username: AndOliver46
+          password: ${SPRING_CONFIG_ACCESS_TOKEN}
+          default-label: main
+          search-paths:
+          - "greeting-service*"
