@@ -75,12 +75,12 @@ public class CambioModel implements Serializable{
 		this.conversionFactor = conversionFactor;
 	}
 
-	public BigDecimal getConversionValue() {
+	public BigDecimal getConvertedValue() {
 		return convertedValue;
 	}
 
-	public void setConversionValue(BigDecimal conversionValue) {
-		this.convertedValue = conversionValue;
+	public void setConvertedValue(BigDecimal convertedValue) {
+		this.convertedValue = convertedValue;
 	}
 
 	public String getEnvironment() {
