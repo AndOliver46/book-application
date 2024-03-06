@@ -4,20 +4,41 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
-public class Book implements Serializable{
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
+
+@Entity
+@Table(name = "book")
+public class BookModel implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@Column(name = "author", nullable = false, length = 180)
 	private String author;
+	@Column(name = "launch_date", nullable = false)
+	@Temporal(TemporalType.DATE)
 	private Date launchDate;
+	@Column(nullable = false)
 	private Double price;
+	@Column(nullable = false, length = 250)
 	private String title;
+	@Transient
 	private String currency;
+	@Transient
 	private String environment;
 	
-	public Book() {}
+	public BookModel() {}
 	
-	public Book(Long id, String author, String title, Date launchDate, Double price, String currency,
+	public BookModel(Long id, String author, String title, Date launchDate, Double price, String currency,
 			String environment) {
 		super();
 		this.id = id;
@@ -98,7 +119,7 @@ public class Book implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Book other = (Book) obj;
+		BookModel other = (BookModel) obj;
 		return Objects.equals(author, other.author) && Objects.equals(currency, other.currency)
 				&& Objects.equals(environment, other.environment) && Objects.equals(id, other.id)
 				&& Objects.equals(launchDate, other.launchDate) && Objects.equals(price, other.price)

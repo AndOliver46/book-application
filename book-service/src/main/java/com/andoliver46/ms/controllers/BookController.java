@@ -8,24 +8,30 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.andoliver46.ms.models.Book;
+import com.andoliver46.ms.models.BookModel;
+import com.andoliver46.ms.repositories.BookRepository;
 
 @RestController
 @RequestMapping("book-service")
 public class BookController {
 	
 	private final Environment env;
+	private final BookRepository bookRepository;
 	
-	public BookController(Environment env) {
+	public BookController(Environment env, BookRepository bookRepository) {
 		this.env = env;
+		this.bookRepository = bookRepository;
 	}
 	
 	@GetMapping("/{id}/{currency}")
-	public Book findBook(@PathVariable Long id, @PathVariable String currency) {
+	public BookModel findBook(@PathVariable Long id, @PathVariable String currency) {
+		
+		var book = bookRepository.findById(id).orElseThrow(() -> new RuntimeException("Book not found."));
 		
 		String port = env.getProperty("server.port");
+		book.setEnvironment(port);
 		
-		return new Book(id, "Nigel Poulton", "Docker Deep Dive", new Date(), Double.valueOf(13.07), currency, port);
+		return book;
 	}
 
 }

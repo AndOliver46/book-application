@@ -6,3 +6,17 @@ spring:
     name: book-service
   config:
     import: optional:configserver:http://localhost:8888
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/book_service?useTimezone=true&serverTimezone=UTC
+    username: test  
+    password: test
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  flyway:
+    url: jdbc:mysql://localhost:3307
+    schemas: book_service
+    user: test
+    password: test
