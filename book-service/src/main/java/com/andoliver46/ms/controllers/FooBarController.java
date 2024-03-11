@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 
 @RestController
@@ -17,7 +18,8 @@ public class FooBarController {
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 	
 	@GetMapping("/foo-bar")
-	@Retry(name = "foo-bar", fallbackMethod = "fallbackMethod")
+	//@Retry(name = "foo-bar", fallbackMethod = "fallbackMethod")
+	@CircuitBreaker(name = "default", fallbackMethod = "fallbackMethod")
 	public String fooBar() {
 		LOGGER.info("Request to foo-bar is received!");
 		ResponseEntity<String> response = new RestTemplate().getForEntity("http://localhost:8080/foo-bar", String.class);
