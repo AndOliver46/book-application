@@ -32,7 +32,7 @@ public class CambioController {
 		var cambio = cambioRepository.findByFromAndTo(from, to);
 		if(cambio == null) throw new RuntimeException("Currency Unsupported");
 		
-		cambio.setEnvironment("Port: " + env.getProperty("server.port"));
+		cambio.setEnvironment("CambioPort: " + env.getProperty("server.port"));
 		cambio.calculate(amount);
 		
 		return cambio;

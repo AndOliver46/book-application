@@ -1,5 +1,6 @@
 package com.andoliver46.ms.controllers;
 
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,10 +16,12 @@ public class BookController {
 	
 	private final BookRepository bookRepository;
 	private final CambioProxy cambioProxy;
+	private final Environment environment;
 	
-	public BookController(BookRepository bookRepository, CambioProxy cambioProxy) {
+	public BookController(BookRepository bookRepository, CambioProxy cambioProxy, Environment environment) {
 		this.bookRepository = bookRepository;
 		this.cambioProxy = cambioProxy;
+		this.environment = environment;
 	}
 	
 	@GetMapping("/{id}/{currency}")
@@ -38,7 +41,7 @@ public class BookController {
 		
 		book.setPrice(cambio.getConvertedValue());
 		book.setCurrency(cambio.getCurrencyTo());
-		book.setEnvironment(cambio.getEnvironment());
+		book.setEnvironment(cambio.getEnvironment() + ", BookPort: " + environment.getProperty("server.port"));
 		
 		return book;
 	}
