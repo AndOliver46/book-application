@@ -5,12 +5,26 @@ spring:
     name: api-gateway
   config:
     import: optional:configserver:http://localhost:8888
-#  cloud:
-#    gateway:
-#      discovery:
-#        locator:
-#          enabled: true
-#          lower-case-service-id: true
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+      - id: cambio-service
+        uri: lb://cambio-service
+        predicates:
+        - Path=/cambio-service/**
+      - id: book-service
+        uri: lb://book-service
+        predicates:
+        - Path=/book-service/**
+      - id: openapi
+        uri: lb://api-gateway
+        predicates:
+        - Path=/v3/api-docs/**
+        filters:
+        - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
 eureka:
   client:
     service-url:
