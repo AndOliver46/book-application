@@ -23,3 +23,6 @@ spring:
     schemas: cambio_service
     user: test
     password: test
+springdoc:
+  api-docs:
+    path: /cambio-service/v3/api-docs
