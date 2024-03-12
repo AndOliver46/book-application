@@ -10,6 +10,10 @@ import com.andoliver46.ms.controllers.proxy.CambioProxy;
 import com.andoliver46.ms.models.BookModel;
 import com.andoliver46.ms.repositories.BookRepository;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "Book Endpoint")
 @RestController
 @RequestMapping("book-service")
 public class BookController {
@@ -24,6 +28,7 @@ public class BookController {
 		this.environment = environment;
 	}
 	
+	@Operation(summary = "Find a Specific book by ID")
 	@GetMapping("/{id}/{currency}")
 	public BookModel findBook(@PathVariable Long id, @PathVariable String currency) {
 		
