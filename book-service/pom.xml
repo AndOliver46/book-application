@@ -99,7 +99,6 @@
 			<groupId>io.opentelemetry</groupId>
 			<artifactId>opentelemetry-exporter-zipkin</artifactId>
 		</dependency>
-
 		<!-- COMMON CHANGES + -->
 		<!-- Enables tracing of REST API calls made using Feign - V3 ONLY-->
 		<dependency>
