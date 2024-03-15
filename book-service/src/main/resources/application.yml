@@ -42,3 +42,8 @@ spring:
 springdoc:
   api-docs:
     path: /book-service/v3/api-docs
+management:
+ tracing:
+  enabled: true
+  sampling:
+    probability: 1.0
