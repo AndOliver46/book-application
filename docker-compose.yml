@@ -7,6 +7,12 @@ services:
       - 8761:8761
     networks:
       - book-network
+  zipkin:
+    image: openzipkin/zipkin:latest
+    ports:
+      - 9411:9411
+    networks:
+      - book-network
 networks:
   book-network:
     driver: bridge
