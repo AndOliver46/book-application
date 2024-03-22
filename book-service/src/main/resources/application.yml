@@ -35,8 +35,7 @@ spring:
       ddl-auto: none
     show-sql: true
   flyway:
-    url: jdbc:mysql://localhost:3307
-    schemas: book_service
+    url: jdbc:mysql://localhost:3307/book_service?useTimezone=true&serverTimezone=UTC
     user: test
     password: test
 springdoc:
