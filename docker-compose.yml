@@ -1,0 +1,13 @@
+version: '3.4'
+
+services:
+  naming-server:
+    image: andoliver46/naming-server:0.0.1-SNAPSHOT
+    ports:
+      - 8761:8761
+    networks:
+      - book-network
+networks:
+  book-network:
+    driver: bridge
+    
