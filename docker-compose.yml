@@ -18,6 +18,36 @@ services:
     environment:
       SPRING.ZIPKIN.BASEURL: http://zipkin-server:9411
       EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka
+      
+  cambio-db:
+    image: mysql:latest
+    restart: always
+    ports:
+      - 3306:3306
+    networks:
+      - book-network
+    environment:
+      TZ: America/Sao_Paulo
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+      MYSQL_DATABASE: cambio_service
+      MYSQL_ROOT_HOST: '%'
+  book-db:
+    image: mysql:latest
+    restart: always
+    ports:
+      - 3307:3306
+    networks:
+      - book-network
+    environment:
+      TZ: America/Sao_Paulo
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+      MYSQL_DATABASE: book_service
+      MYSQL_ROOT_HOST: '%'
+      
   zipkin-server:
     image: openzipkin/zipkin:latest
     ports:
