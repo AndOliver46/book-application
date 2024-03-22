@@ -7,7 +7,18 @@ services:
       - 8761:8761
     networks:
       - book-network
-  zipkin:
+  api-gateway:
+    image: andoliver46/api-gateway:0.0.1-SNAPSHOT
+    ports:
+      - 8765:8765
+    networks:
+      - book-network
+    depends_on:
+      - naming-server
+    environment:
+      SPRING.ZIPKIN.BASEURL: http://zipkin-server:9411
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka
+  zipkin-server:
     image: openzipkin/zipkin:latest
     ports:
       - 9411:9411
