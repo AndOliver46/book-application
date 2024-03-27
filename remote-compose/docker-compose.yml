@@ -1,0 +1,111 @@
+version: '3.4'
+
+services:
+  naming-server:
+    image: andoliver46/naming-server:latest
+    ports:
+      - 8761:8761
+    networks:
+      - book-network
+  api-gateway:
+    image: andoliver46/api-gateway:latest
+    ports:
+      - 8765:8765
+    networks:
+      - book-network
+    depends_on:
+      - naming-server
+    environment:
+      MANAGEMENT.ZIPKIN.TRACING.ENDPOINT:  http://zipkin-server:9411/api/v2/spans
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka
+      
+  cambio-service:
+    image: andoliver46/cambio-service:latest
+    restart: always
+    build:
+      context: .
+      dockerfile: cambio-service/Dockerfile
+    ports:
+      - 8000:8000
+    networks:
+      - book-network
+    depends_on:
+      - naming-server
+      - cambio-db
+    environment:
+      TZ: America/Sao_Paulo
+      MANAGEMENT.ZIPKIN.TRACING.ENDPOINT:  http://zipkin-server:9411/api/v2/spans
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka
+      SPRING.DATASOURCE.URL: jdbc:mysql://cambio-db:3306/cambio_service?useTimezone=true&serverTimezone=UTC
+      SPRING.DATASOURCE.USERNAME: test
+      SPRING.DATASOURCE.PASSWORD: test
+      SPRING.FLYWAY.URL: jdbc:mysql://cambio-db:3306/cambio_service?useTimezone=true&serverTimezone=UTC
+      SPRING.FLYWAY.USER: test
+      SPRING.FLYWAY.PASSWORD: test
+  book-service:
+    image: andoliver46/book-service:latest
+    restart: always
+    build:
+      context: .
+      dockerfile: book-service/Dockerfile
+    ports:
+      - 8100:8100
+    networks:
+      - book-network
+    depends_on:
+      - naming-server
+      - book-db
+      - cambio-service
+    environment:
+      TZ: America/Sao_Paulo
+      MANAGEMENT.ZIPKIN.TRACING.ENDPOINT:  http://zipkin-server:9411/api/v2/spans
+      EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8761/eureka
+      SPRING.DATASOURCE.URL: jdbc:mysql://book-db:3307/book_service?useTimezone=true&serverTimezone=UTC
+      SPRING.DATASOURCE.USERNAME: test
+      SPRING.DATASOURCE.PASSWORD: test
+      SPRING.FLYWAY.URL: jdbc:mysql://book-db:3307/book_service?useTimezone=true&serverTimezone=UTC
+      SPRING.FLYWAY.USER: test
+      SPRING.FLYWAY.PASSWORD: test
+      
+  cambio-db:
+    image: mysql:latest
+    restart: always
+    ports:
+      - 3306:3306
+    networks:
+      - book-network
+    environment:
+      TZ: America/Sao_Paulo
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+      MYSQL_DATABASE: cambio_service
+      MYSQL_ROOT_HOST: '%'
+  book-db:
+    image: mysql:latest
+    restart: always
+    ports:
+      - 3307:3307
+    expose:
+      - 3307
+    networks:
+      - book-network
+    environment:
+      TZ: America/Sao_Paulo
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+      MYSQL_DATABASE: book_service
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_TCP_PORT: 3307
+      
+  zipkin-server:
+    image: openzipkin/zipkin:2.23.2
+    ports:
+      - 9411:9411
+    networks:
+      - book-network
+networks:
+  book-network:
+    driver: bridge
+    
