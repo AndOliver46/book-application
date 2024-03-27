@@ -55,5 +55,15 @@ jobs:
         working-directory: ./
         run: docker-compose build
 
-      
-       
+      - name: Push to Docker Hub
+        working-directory: ./
+        run: |
+          docker tag ${{sercrets.DOCKER_USERNAME}}/naming-server:0.0.1-SNAPSHOT ${{sercrets.DOCKER_USERNAME}}/naming-server:${{github.run_id}}
+          docker tag ${{sercrets.DOCKER_USERNAME}}/api-gateway:0.0.1-SNAPSHOT ${{sercrets.DOCKER_USERNAME}}/api-gateway:${{github.run_id}}
+          docker tag ${{sercrets.DOCKER_USERNAME}}/cambio-service:latest ${{sercrets.DOCKER_USERNAME}}/cambio-service:${{github.run_id}}
+          docker tag ${{sercrets.DOCKER_USERNAME}}/book-service:latest ${{sercrets.DOCKER_USERNAME}}/book-service:${{github.run_id}}
+          docker push ${{sercrets.DOCKER_USERNAME}}/naming-server:${{github.run_id}}
+          docker push ${{sercrets.DOCKER_USERNAME}}/api-gateway:${{github.run_id}}
+          docker push ${{sercrets.DOCKER_USERNAME}}/cambio-service:${{github.run_id}}
+          docker push ${{sercrets.DOCKER_USERNAME}}/book-service:${{github.run_id}}
+          
