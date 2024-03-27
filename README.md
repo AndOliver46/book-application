@@ -1,3 +1,5 @@
+[![CI](https://github.com/AndOliver46/book-microservices-application/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/AndOliver46/book-microservices-application/actions/workflows/docker-publish.yml)
+
 # Project Description
 
 This project is a demonstration of building microservices from scratch using Spring Cloud, Spring Boot, Java, and Docker. It accompanies the Udemy course "Microsserviços do Zero com Spring Cloud, Spring Boot e Docker" instructed by Leandro Costa.
